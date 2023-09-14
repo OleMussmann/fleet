@@ -106,13 +106,13 @@ def random_char():
 def color_text(color, text):
     return color + text + Style.RESET_ALL
 
-def get_string(message, mask, text_color, scramble_color):
+def get_string(message, mask, text_color, highlight_color, scramble_color):
     """
     mask=[0, 0, 1, 0, 1, ...]"
     """
     string = ''.join([
         color_text(COLORS[scramble_color]["dim"], random_char()) if mask[i]==0 else
-        color_text(COLORS[text_color]["bright"], message[i]) if 0<mask[i]<FLASH_STOP else
+        color_text(COLORS[highlight_color]["bright"], message[i]) if 0<mask[i]<FLASH_STOP else
         color_text(COLORS[text_color]["normal"], message[i])
         for i in range(len(message))
         ])
@@ -122,7 +122,7 @@ def coalesce_random(color):
     print()
     mask = [0]*len(MESSAGE)
     for i in range(len(MESSAGE) + FLASH_STOP):
-        print("\033[1A" + get_string(MESSAGE, mask, color, "none"))
+        print("\033[1A" + get_string(MESSAGE, mask, color, color, "none"))
         mask = bump_mask(mask, 2, "random")
         time.sleep(DELAY)
 
@@ -130,7 +130,7 @@ def coalesce_left(color):
     print()
     mask = [0]*len(MESSAGE)
     for i in range(len(MESSAGE) + FLASH_STOP):
-        print("\033[1A" + get_string(MESSAGE, mask, color, "none"))
+        print("\033[1A" + get_string(MESSAGE, mask, color, color, "none"))
         mask = bump_mask(mask, 2, "left")
         time.sleep(DELAY)
 
@@ -138,7 +138,7 @@ def coalesce_right(color):
     print()
     mask = [0]*len(MESSAGE)
     for i in range(len(MESSAGE) + FLASH_STOP):
-        print("\033[1A" + get_string(MESSAGE, mask, color, "none"))
+        print("\033[1A" + get_string(MESSAGE, mask, color, color, "none"))
         mask = bump_mask(mask, 2, "right")
         time.sleep(DELAY)
 

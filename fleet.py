@@ -29,6 +29,7 @@ OK_COLOR = "green"
 WARNING_COLOR = "yellow"
 ERROR_COLOR = "red"
 SCRAMBLE_COLOR = "cyan"
+HIGHLIGHT_COLOR = "cyan"
 STANDARD_COLOR = "standard"
 
 COLOR_MACHINES = False
@@ -131,12 +132,12 @@ def get_remote_version_text():
     global VERSION_TEXT_SPECS
 
     if REMOTE_VERSION == "unset":
-        text: str = colors.get_string("++++++++", VERSION_TEXT_SPECS["version_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string("++++++++", VERSION_TEXT_SPECS["version_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
     elif REMOTE_VERSION == "unknown":
-        text: str = colors.get_string("       ?", VERSION_TEXT_SPECS["version_mask"], text_color=ERROR_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string("       ?", VERSION_TEXT_SPECS["version_mask"], text_color=ERROR_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         VERSION_TEXT_SPECS["version_mask"] = colors.bump_mask(VERSION_TEXT_SPECS["version_mask"], MASK_STEP, DIRECTION)
     else:
-        text: str = colors.get_string(REMOTE_VERSION, VERSION_TEXT_SPECS["version_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string(REMOTE_VERSION, VERSION_TEXT_SPECS["version_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         VERSION_TEXT_SPECS["version_mask"] = colors.bump_mask(VERSION_TEXT_SPECS["version_mask"], MASK_STEP, DIRECTION)
     return text
 
@@ -146,21 +147,21 @@ def get_machine_text(machine):
 
     machine_color: str
     if MACHINE_SPECS[machine]["is_online"] == "true":
-        is_online_text: str = colors.get_string("•", MACHINE_TEXT_SPECS[machine]["is_online_mask"], text_color=OK_COLOR, scramble_color=SCRAMBLE_COLOR)
+        is_online_text: str = colors.get_string("•", MACHINE_TEXT_SPECS[machine]["is_online_mask"], text_color=OK_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["is_online_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["is_online_mask"], MASK_STEP, DIRECTION)
         machine_color = OK_COLOR
     elif MACHINE_SPECS[machine]["is_online"] == "false":
-        is_online_text: str = colors.get_string("-", MACHINE_TEXT_SPECS[machine]["is_online_mask"], text_color=ERROR_COLOR, scramble_color=SCRAMBLE_COLOR)
+        is_online_text: str = colors.get_string("-", MACHINE_TEXT_SPECS[machine]["is_online_mask"], text_color=ERROR_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["is_online_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["is_online_mask"], MASK_STEP, DIRECTION)
         machine_color = ERROR_COLOR
     else:
-        is_online_text: str = colors.get_string("+", MACHINE_TEXT_SPECS[machine]["is_online_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        is_online_text: str = colors.get_string("+", MACHINE_TEXT_SPECS[machine]["is_online_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         machine_color = STANDARD_COLOR
 
     if not COLOR_MACHINES:
         machine_color = STANDARD_COLOR
 
-    machine_text: str = colors.get_string(machine.rjust(MAX_MACHINE_LENGTH), MACHINE_TEXT_SPECS[machine]["machine_mask"], text_color=machine_color, scramble_color=SCRAMBLE_COLOR)
+    machine_text: str = colors.get_string(machine.rjust(MAX_MACHINE_LENGTH), MACHINE_TEXT_SPECS[machine]["machine_mask"], text_color=machine_color, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
     MACHINE_TEXT_SPECS[machine]["machine_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["machine_mask"], MASK_STEP, DIRECTION)
     return machine_text + " " + is_online_text
 
@@ -169,22 +170,22 @@ def get_automation_text(machine):
     global MACHINE_TEXT_SPECS
 
     if MACHINE_SPECS[machine]["automation_status"] == "unset":
-        text: str = colors.get_string("+", MACHINE_TEXT_SPECS[machine]["automation_status_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string("+", MACHINE_TEXT_SPECS[machine]["automation_status_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         return text
     if MACHINE_SPECS[machine]["automation_status"] == "automated":
-        text: str = colors.get_string("•", MACHINE_TEXT_SPECS[machine]["automation_status_mask"], text_color=OK_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string("•", MACHINE_TEXT_SPECS[machine]["automation_status_mask"], text_color=OK_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["automation_status_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["automation_status_mask"], MASK_STEP, DIRECTION)
         return text
     if MACHINE_SPECS[machine]["automation_status"] == "build failed":
-        text: str = colors.get_string("!", MACHINE_TEXT_SPECS[machine]["automation_status_mask"], text_color=WARNING_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string("!", MACHINE_TEXT_SPECS[machine]["automation_status_mask"], text_color=WARNING_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["automation_status_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["automation_status_mask"], MASK_STEP, DIRECTION)
         return text
     if MACHINE_SPECS[machine]["automation_status"] == "unknown":
-        text: str = colors.get_string("?", MACHINE_TEXT_SPECS[machine]["automation_status_mask"], text_color=WARNING_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string("?", MACHINE_TEXT_SPECS[machine]["automation_status_mask"], text_color=WARNING_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["automation_status_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["automation_status_mask"], MASK_STEP, DIRECTION)
         return text
     else:  # "none"
-        text: str = colors.get_string(" ", MACHINE_TEXT_SPECS[machine]["automation_status_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string(" ", MACHINE_TEXT_SPECS[machine]["automation_status_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["automation_status_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["automation_status_mask"], MASK_STEP, DIRECTION)
         return text
 
@@ -196,20 +197,20 @@ def get_version_text(machine):
 
 
     if MACHINE_SPECS[machine]["nixos_version"] == "unset":
-        version_text: str = colors.get_string("++++++++", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
-        version_match_text: str = colors.get_string("+", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        version_text: str = colors.get_string("++++++++", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
+        version_match_text: str = colors.get_string("+", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         return version_text + " " + version_match_text
 
     elif MACHINE_SPECS[machine]["nixos_version"] == "none":
-        version_text: str = colors.get_string("        ", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
-        version_match_text: str = colors.get_string(" ", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        version_text: str = colors.get_string("        ", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
+        version_match_text: str = colors.get_string(" ", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["nixos_version_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], MASK_STEP, DIRECTION)
         MACHINE_TEXT_SPECS[machine]["nixos_version_match_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], MASK_STEP, DIRECTION)
         return version_text + " " + version_match_text
 
     elif MACHINE_SPECS[machine]["nixos_version"] == "unknown":
-        version_text: str = colors.get_string("        ", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
-        version_match_text: str = colors.get_string("?", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=ERROR_COLOR, scramble_color=SCRAMBLE_COLOR)
+        version_text: str = colors.get_string("        ", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
+        version_match_text: str = colors.get_string("?", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=ERROR_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["nixos_version_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], MASK_STEP, DIRECTION)
         MACHINE_TEXT_SPECS[machine]["nixos_version_match_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], MASK_STEP, DIRECTION)
         return version_text + " " + version_match_text
@@ -217,21 +218,21 @@ def get_version_text(machine):
     else:  # has actual nixos_version
 
         if REMOTE_VERSION == "unset" or REMOTE_VERSION == "unknown":
-            version_match_text: str = colors.get_string("?", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=WARNING_COLOR, scramble_color=SCRAMBLE_COLOR)
+            version_match_text: str = colors.get_string("?", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=WARNING_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
             MACHINE_TEXT_SPECS[machine]["nixos_version_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], MASK_STEP, DIRECTION)
             version_color = WARNING_COLOR
         elif MACHINE_SPECS[machine]["nixos_version"] == REMOTE_VERSION:
-            version_match_text: str = colors.get_string("•", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=OK_COLOR, scramble_color=SCRAMBLE_COLOR)
+            version_match_text: str = colors.get_string("•", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=OK_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
             MACHINE_TEXT_SPECS[machine]["nixos_version_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], MASK_STEP, DIRECTION)
             version_color = OK_COLOR
         else:  # MACHINE_SPECS[machine]["nixos_version"] != REMOTE_VERSION:
-            version_match_text: str = colors.get_string("!", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=WARNING_COLOR, scramble_color=SCRAMBLE_COLOR)
+            version_match_text: str = colors.get_string("!", MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=WARNING_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
             MACHINE_TEXT_SPECS[machine]["nixos_version_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], MASK_STEP, DIRECTION)
             version_color = WARNING_COLOR
 
         if not COLOR_VERSIONS:
             version_color = STANDARD_COLOR
-        version_text: str = colors.get_string(MACHINE_SPECS[machine]["nixos_version"], MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=version_color, scramble_color=SCRAMBLE_COLOR)
+        version_text: str = colors.get_string(MACHINE_SPECS[machine]["nixos_version"], MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], text_color=version_color, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["nixos_version_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["nixos_version_mask"], MASK_STEP, DIRECTION)
 
     return version_text + " " + version_match_text
@@ -241,15 +242,15 @@ def get_generation_text(machine):
     global MACHINE_SPECS
 
     if MACHINE_SPECS[machine]["generation"] == "unset":
-        text: str = colors.get_string("++++", MACHINE_TEXT_SPECS[machine]["generation_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string("++++", MACHINE_TEXT_SPECS[machine]["generation_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
     elif MACHINE_SPECS[machine]["generation"] == "none":
-        text: str = colors.get_string("    ", MACHINE_TEXT_SPECS[machine]["generation_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string("    ", MACHINE_TEXT_SPECS[machine]["generation_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["generation_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["generation_mask"], MASK_STEP, DIRECTION)
     elif MACHINE_SPECS[machine]["generation"] == "unknown":
-        text: str = colors.get_string("   ?", MACHINE_TEXT_SPECS[machine]["generation_mask"], text_color=ERROR_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string("   ?", MACHINE_TEXT_SPECS[machine]["generation_mask"], text_color=ERROR_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["generation_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["generation_mask"], MASK_STEP, DIRECTION)
     else:
-        text: str = colors.get_string(MACHINE_SPECS[machine]["generation"].rjust(4), MACHINE_TEXT_SPECS[machine]["generation_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        text: str = colors.get_string(MACHINE_SPECS[machine]["generation"].rjust(4), MACHINE_TEXT_SPECS[machine]["generation_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["generation_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["generation_mask"], MASK_STEP, DIRECTION)
     return text
 
@@ -260,16 +261,16 @@ def get_build_time_text(machine):
     built_color: str
 
     if MACHINE_SPECS[machine]["last_build"] == "unset":
-        build_text: str = colors.get_string("++++++++", MACHINE_TEXT_SPECS[machine]["last_build_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
-        build_warning_text: str = colors.get_string("+", MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        build_text: str = colors.get_string("++++++++", MACHINE_TEXT_SPECS[machine]["last_build_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
+        build_warning_text: str = colors.get_string("+", MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
     elif MACHINE_SPECS[machine]["last_build"] == "none":
-        build_text: str = colors.get_string("        ", MACHINE_TEXT_SPECS[machine]["last_build_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
-        build_warning_text: str = colors.get_string(" ", MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
+        build_text: str = colors.get_string("        ", MACHINE_TEXT_SPECS[machine]["last_build_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
+        build_warning_text: str = colors.get_string(" ", MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["last_build_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["last_build_mask"], MASK_STEP, DIRECTION)
         MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], MASK_STEP, DIRECTION)
     elif MACHINE_SPECS[machine]["last_build"] == "unknown":
-        build_text: str = colors.get_string("        ", MACHINE_TEXT_SPECS[machine]["last_build_mask"], text_color=STANDARD_COLOR, scramble_color=SCRAMBLE_COLOR)
-        build_warning_text: str = colors.get_string("?", MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], text_color=ERROR_COLOR, scramble_color=SCRAMBLE_COLOR)
+        build_text: str = colors.get_string("        ", MACHINE_TEXT_SPECS[machine]["last_build_mask"], text_color=STANDARD_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
+        build_warning_text: str = colors.get_string("?", MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], text_color=ERROR_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
         MACHINE_TEXT_SPECS[machine]["last_build_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["last_build_mask"], MASK_STEP, DIRECTION)
         MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], MASK_STEP, DIRECTION)
     else:
@@ -283,10 +284,10 @@ def get_build_time_text(machine):
             build_warning = False
 
         if build_warning:
-            build_warning_text: str = colors.get_string("!", MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], text_color=WARNING_COLOR, scramble_color=SCRAMBLE_COLOR)
+            build_warning_text: str = colors.get_string("!", MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], text_color=WARNING_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
             built_color = WARNING_COLOR
         else:
-            build_warning_text: str = colors.get_string("•", MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], text_color=OK_COLOR, scramble_color=SCRAMBLE_COLOR)
+            build_warning_text: str = colors.get_string("•", MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], text_color=OK_COLOR, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
             built_color = OK_COLOR
 
         if not COLOR_BUILT:
@@ -294,7 +295,7 @@ def get_build_time_text(machine):
 
         MACHINE_TEXT_SPECS[machine]["last_build_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["last_build_mask"], MASK_STEP, DIRECTION)
         MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"] = colors.bump_mask(MACHINE_TEXT_SPECS[machine]["last_build_warning_mask"], MASK_STEP, DIRECTION)
-        build_text: str = colors.get_string(MACHINE_SPECS[machine]["last_build"].rjust(8), MACHINE_TEXT_SPECS[machine]["last_build_mask"], text_color=built_color, scramble_color=SCRAMBLE_COLOR)
+        build_text: str = colors.get_string(MACHINE_SPECS[machine]["last_build"].rjust(8), MACHINE_TEXT_SPECS[machine]["last_build_mask"], text_color=built_color, highlight_color=HIGHLIGHT_COLOR, scramble_color=SCRAMBLE_COLOR)
 
     return build_text + " " + build_warning_text
 
