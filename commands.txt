@@ -1,0 +1,12 @@
+nixos-version --json
+{"configurationRevision":"26fb48b5e18920cafc80c54ab8b447fb178903ed","nixosVersion":"23.05.20230803.e9ca92b","nixpkgsRevision":"e9ca92b55bed47696cc7cc25d3f854a1e2e01f86"}
+
+ls -lah  --time-style=long-iso /nix/var/nix/profiles/system
+lrwxrwxrwx 1 root root 15 2023-08-04 19:42 /nix/var/nix/profiles/system -> system-225-link
+
+curl -s "https://gitlab.com/api/v4/projects/OleMussmann%2Fnixos/repository/commits" | jq '.[0].short_id'
+"6958b4c5"
+
+let "diff=$(date +%s)-$(date --date="2023-08-04 19:42" +%s)"
+printf '%dd %dh\n' $((diff/86400)) $((diff%86400/3600))
+2d 18h
