@@ -1,0 +1,18 @@
+[project]
+name = "fleet"
+version = "0.0.1"
+description = "Fleet monitoring for Nix/NixOS machines"
+authors = [
+    {name = "Ole Mussmann", email = "gitlab+account@ole.mn"},
+]
+dependencies = [
+    "colorama>=0.4.6",
+]
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[project.scripts]
+fleet = "fleet:main"

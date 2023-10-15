@@ -11,14 +11,12 @@
     py = with pkgs; python311;
     pypkgs = with pkgs; python311Packages;
     pkgs = nixpkgs.legacyPackages.${system};
-    python_packages = with pkgs; [
-      (
-        py.withPackages(
-          ps: with ps; [
-            colorama
-          ]
-        )
-      )
+    python_packages = [
+      (py.withPackages(
+        ps: with ps; [
+          colorama
+        ]
+      ))
     ];
     system_packages = with pkgs; [
       # optional system packages
@@ -33,12 +31,14 @@
       FLEET_PAT_TOKEN="";
     };
     defaultPackage = packages.fleet;
-    packages.default = with pypkgs; buildPythonPackage {
-      name = my_name;
-      version = my_version;
+    packages.default = pypkgs.buildPythonPackage {
+      name = "fleet";
+      version = "0.0.1";
+      format = "pyproject";
       src = ./.;
+      buildInputs = [ pypkgs.setuptools ];
       propagatedBuildInputs = python_packages;
     };
-    apps.default = { type = "app"; program = "${self.packages."${system}".default}/bin/fleet.py"; };
+    apps.default = { type = "app"; program = "${self.packages."${system}".default}/bin/fleet"; };
   });
 }

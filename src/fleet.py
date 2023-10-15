@@ -9,6 +9,7 @@ import colors
 
 from typing import TypedDict
 
+
 try:
     MACHINE_LIST: list[str] = os.environ['FLEET_MACHINES'].split(" ")
     URL: str = os.environ['FLEET_REPO_URL']
@@ -332,22 +333,27 @@ def print_text():
         print(text)
         time.sleep(DELAY)
 
-main_loop = threading.Thread(target=print_text, args=(), daemon=True)
-tasks = []
-for machine in MACHINE_LIST:
-    tasks.append(threading.Thread(target=get_machine_specs, args=(machine,), daemon=True))
-tasks.append(threading.Thread(target=get_remote_version, args=(URL, PAT_TOKEN), daemon=True))
+def main():
+    global DONE
+    main_loop = threading.Thread(target=print_text, args=(), daemon=True)
+    tasks = []
+    for machine in MACHINE_LIST:
+        tasks.append(threading.Thread(target=get_machine_specs, args=(machine,), daemon=True))
+    tasks.append(threading.Thread(target=get_remote_version, args=(URL, PAT_TOKEN), daemon=True))
 
-main_loop.start()
-for task in tasks:
-    task.start()
-
-try:
+    main_loop.start()
     for task in tasks:
-        task.join()
+        task.start()
 
-    time.sleep(DELAY*(8+5))
-    DONE = True
-    main_loop.join()
-except KeyboardInterrupt:
-    exit(1)
+    try:
+        for task in tasks:
+            task.join()
+
+        time.sleep(DELAY*(8+5))
+        DONE = True
+        main_loop.join()
+    except KeyboardInterrupt:
+        exit(1)
+
+if __name__ == "__main__":
+    main()
