@@ -31,7 +31,7 @@
       FLEET_PAT_TOKEN="";
     };
     defaultPackage = packages.fleet;
-    packages.default = pypkgs.buildPythonPackage {
+    packages.fleet = pypkgs.buildPythonPackage {
       name = "fleet";
       version = "0.0.1";
       format = "pyproject";
